@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import rooms from '../data/rooms.json'
 
 export const fetchRooms = (req: Request, res: Response,) => {
-    res.send('Fetch All Rooms')
+    res.json(rooms)
 }
 export const fetchRoomById = (req: Request, res: Response,) => {
     const id = req.params.id

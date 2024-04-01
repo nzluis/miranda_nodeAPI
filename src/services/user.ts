@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import users from '../data/users.json'
 
 export const fetchUsers = (req: Request, res: Response,) => {
-    res.send('Fetch All Users')
+    res.json(users)
 }
 export const fetchUserById = (req: Request, res: Response,) => {
     const id = req.params.id

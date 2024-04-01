@@ -1,0 +1,37 @@
+{
+    "ts-node": {
+        "cwd": "/home/luis/Desktop/oxygen/training/miranda_nodeAPI",
+        "projectSearchDir": "/home/luis/Desktop/oxygen/training/miranda_nodeAPI"
+    },
+    "compilerOptions": {
+        "lib": [
+            "es2021"
+        ],
+        "module": "node16",
+        "target": "es2021",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "types": [
+            "node"
+        ],
+        "sourceMap": true,
+        "inlineSourceMap": false,
+        "inlineSources": true,
+        "declaration": false,
+        "noEmit": false,
+        "outDir": "./.ts-node",
+        "moduleDetection": "force",
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "alwaysStrict": true,
+        "useUnknownInCatchVariables": true
+    }
+}

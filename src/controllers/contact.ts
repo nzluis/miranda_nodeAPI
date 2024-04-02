@@ -20,7 +20,7 @@ export const getContacts = async (req: Request, res: Response, next: NextFunctio
 export const getContactById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response = await delay({ data: fetchOne(id, 'contacts'), ok: true })
+        const response = await delay({ data: fetchOne(Number(id), 'contacts'), ok: true })
         if (!response.ok) res.status(500).send('Not possible to access DB')
         else if (!response.data) res.status(404).send('Contact ID not found')
         else res.json(response.data)
@@ -47,7 +47,7 @@ export const editContact = (req: Request, res: Response, next: NextFunction) => 
     try {
         const id = req.params.id
         const response: ContactResponse = { data: req.body, ok: true }
-        if (!updateOne(id, 'contacts', req.body)) res.send('Unknown ID')
+        if (!updateOne(Number(id), 'contacts', req.body)) res.send('Unknown ID')
         else if (!response.ok) {
             res.status(500).send('Not possible to access DB')
         }
@@ -63,7 +63,7 @@ export const deleteContact = (req: Request, res: Response, next: NextFunction) =
     try {
         const id = req.params.id
         const response: { data: ContactData, ok: boolean } = { data: req.body, ok: true }
-        if (!deleteOne(id, 'contacts')) res.send('Unknown ID')
+        if (!deleteOne(Number(id), 'contacts')) res.send('Unknown ID')
         else if (!response.ok) {
             res.status(500).send('Not possible to access DB')
         }

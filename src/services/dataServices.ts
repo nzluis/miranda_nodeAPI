@@ -11,7 +11,7 @@ export const fetchAll = (filename: string): ArraysOfData | [] => {
     return JSON.parse(readFileSync(`./src/data/${filename}.json`, 'utf-8'))
 }
 
-export const fetchOne = (id: string, filename: string): Data => {
+export const fetchOne = (id: string | number, filename: string): Data => {
     const data = JSON.parse(readFileSync(`./src/data/${filename}.json`, 'utf-8'))
     return data.find((element: Data) => element.id === id)
 }
@@ -24,7 +24,7 @@ export const addNew = (newAdded: Data, filename: string): boolean => {
     return true
 }
 
-export const updateOne = (id: string, filename: string, updatedData: Data): boolean => {
+export const updateOne = (id: string | number, filename: string, updatedData: Data): boolean => {
     const data = JSON.parse(readFileSync(`./src/data/${filename}.json`, 'utf-8'))
     if (!data.some((element: Data) => element.id === id)) return false
     const dataAfterEdit = data.map((element: Data) => element.id === id ? updatedData : element)
@@ -32,7 +32,7 @@ export const updateOne = (id: string, filename: string, updatedData: Data): bool
     return true
 }
 
-export const deleteOne = (id: string, filename: string): boolean => {
+export const deleteOne = (id: string | number, filename: string): boolean => {
     const data = JSON.parse(readFileSync(`./src/data/${filename}.json`, 'utf-8'))
     if (!data.some((element: Data) => element.id === id)) return false
     const dataAfterDelete = data.filter((element: Data) => element.id !== id)

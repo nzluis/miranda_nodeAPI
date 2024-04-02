@@ -6,6 +6,7 @@ import { usersRouter } from './routes/user'
 import { loginRouter } from './controllers/login'
 import dotenv from 'dotenv'
 import { authMiddleware } from './middleware/auth'
+import path from 'path'
 
 dotenv.config()
 
@@ -14,11 +15,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
-    res.json({ Listen: 'Running App on server' })
+    const filePath = path.resolve(__dirname, 'index.html');
+    res.sendFile(filePath)
 })
 
 app.use('/login', loginRouter)
-app.use('/bookings', authMiddleware, bookingsRouter)
-app.use('/rooms', authMiddleware, roomsRouter)
+app.use('/bookings', bookingsRouter)
+app.use('/rooms', roomsRouter)
 app.use('/contacts', authMiddleware, contactsRouter)
 app.use('/users', authMiddleware, usersRouter)
+
+

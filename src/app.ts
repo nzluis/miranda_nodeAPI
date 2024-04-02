@@ -6,6 +6,7 @@ import { usersRouter } from './routes/user'
 import { loginRouter } from './controllers/login'
 import dotenv from 'dotenv'
 import path from 'path'
+import { authMiddleware } from './middleware/auth'
 
 dotenv.config()
 
@@ -21,7 +22,7 @@ app.get('/', (_req: Request, res: Response) => {
 app.use('/login', loginRouter)
 app.use('/bookings', bookingsRouter)
 app.use('/rooms', roomsRouter)
-app.use('/contacts', contactsRouter)
-app.use('/users', usersRouter)
+app.use('/contacts', authMiddleware, contactsRouter)
+app.use('/users', authMiddleware, usersRouter)
 
 

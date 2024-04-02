@@ -1,10 +1,21 @@
-import express from 'express'
-import { createRoom, deleteRoom, editRoom, fetchRoomById, fetchRooms } from '../services/room'
+import { Request, Response } from 'express'
+import rooms from '../data/rooms.json'
 
-export const roomsRouter = express.Router()
-
-roomsRouter.get('/', fetchRooms)
-roomsRouter.get('/:id', fetchRoomById)
-roomsRouter.post('/:id/create', createRoom)
-roomsRouter.put('/:id/update', editRoom)
-roomsRouter.delete('/:id/delete', deleteRoom)
+export const fetchRooms = (req: Request, res: Response,) => {
+    res.json(rooms)
+}
+export const fetchRoomById = (req: Request, res: Response,) => {
+    const id = req.params.id
+    const room = rooms.filter(room => room.id === id)
+    if (id && rooms.length !== 0) res.json(room)
+    else res.status(502).send('Not Found')
+}
+export const createRoom = (req: Request, res: Response,) => {
+    res.send('Create a Room')
+}
+export const editRoom = (req: Request, res: Response,) => {
+    res.send('Edit a Room')
+}
+export const deleteRoom = (req: Request, res: Response,) => {
+    res.send('Delete a Room')
+}

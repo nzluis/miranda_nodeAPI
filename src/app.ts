@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
-    const filePath = path.resolve(__dirname, 'index.html');
+    const filePath = path.resolve(process.cwd(), 'index.html');
     res.sendFile(filePath)
 })
 

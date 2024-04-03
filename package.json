@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "format": "eslint src/**/*.ts --fix",
+    "deploy": "npm run build && serverless deploy",
+    "build": "rimraf dist && tsc"
   },
   "repository": {
     "type": "git",
@@ -26,12 +28,15 @@
     "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.57.0",
     "nodemon": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "serverless": "^3.38.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "serverless-http": "^3.2.0"
   }
 }

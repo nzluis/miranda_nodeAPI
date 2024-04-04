@@ -4,14 +4,14 @@ import { delay } from '../utils/delay'
 import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/dataServices'
 
 type RoomResponse = {
-    data: RoomData | RoomData[] | undefined
+    data: RoomData | RoomData[] | null
     ok: boolean
 }
 
 export const getRooms = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const response: RoomResponse = await delay({ data: fetchAll('rooms'), ok: true })
-        if (!response.ok) res.status(502).send('Data not found')
+        if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {
         next(error)
@@ -20,36 +20,29 @@ export const getRooms = async (req: Request, res: Response, next: NextFunction) 
 export const getRoomById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response = await delay({ data: fetchOne(id, 'rooms'), ok: true })
-        if (!response.ok) res.status(500).send('Not possible to access DB')
-        else if (!response.data) res.status(404).send('Room ID not found')
+        const response: RoomResponse = await delay(fetchOne(id, 'rooms'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
         else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
-export const createRoom = (req: Request, res: Response, next: NextFunction) => {
+export const createRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = { data: req.body, ok: true }
-        if (!addNew(req.body, 'rooms')) res.send('ID already exists')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
-        else {
+        const response: RoomResponse = await delay(addNew(req.body, 'rooms'))
+        if (!response.ok) {
+            res.status(409).send('ID already exists')
             console.log('Successfully created')
-            res.send(response.data)
         }
+        else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
-export const editRoom = (req: Request, res: Response, next: NextFunction) => {
+export const editRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = { data: req.body, ok: true }
-        if (!updateOne(req.body, 'rooms')) res.send('Unknown ID')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
+        const response: RoomResponse = await delay(updateOne(req.body, 'rooms'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
         else {
             console.log('Successfully edited')
             res.json(response.data)
@@ -58,17 +51,14 @@ export const editRoom = (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
-export const deleteRoom = (req: Request, res: Response, next: NextFunction) => {
+export const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response: { data: RoomData, ok: boolean } = { data: req.body, ok: true }
-        if (!deleteOne(id, 'rooms')) res.send('Unknown ID')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
+        const response: RoomResponse = await delay(deleteOne(id, 'rooms'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
         else {
             console.log('Successfully deleted')
-            res.json(response.data!.id)
+            res.json(response.data)
         }
     } catch (error) {
         next(error)

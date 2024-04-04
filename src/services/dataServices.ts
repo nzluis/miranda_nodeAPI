@@ -43,7 +43,7 @@ export const deleteOne = (id: string | number, filename: string): DataResponse =
     const deletedData: Data = JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
         .find((element: Data) => element.id.toString() === id)
     if (!deletedData) return { data: null, ok: false }
-    const dataAfterDelete = data.filter((element: Data) => element.id !== id)
+    const dataAfterDelete = data.filter((element: Data) => element.id.toString() !== id)
     writeFileSync(`./data/${filename}.json`, JSON.stringify(dataAfterDelete))
     return { data: deletedData, ok: true }
 }

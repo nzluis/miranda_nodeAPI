@@ -20,9 +20,12 @@ app.get('/', (_req: Request, res: Response) => {
 })
 
 app.use('/login', loginRouter)
-app.use('/bookings', bookingsRouter)
-app.use('/rooms', roomsRouter)
+app.use('/bookings', authMiddleware, bookingsRouter)
+app.use('/rooms', authMiddleware, roomsRouter)
 app.use('/contacts', authMiddleware, contactsRouter)
 app.use('/users', authMiddleware, usersRouter)
 
-
+app.use((error: Error, _req: Request, res: Response) => {
+    console.error(error)
+    return res.status(500).json({ message: 'Error from Server' })
+})

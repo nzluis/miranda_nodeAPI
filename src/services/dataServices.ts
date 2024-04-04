@@ -20,7 +20,7 @@ export const addNew = (newAdded: Data, filename: string): boolean => {
     const data = JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
     if (data.some((element: Data) => element.id === newAdded.id)) return false
     const dataAfterAddNew = data.concat(newAdded)
-    writeFileSync(`./src/data/${filename}.json`, JSON.stringify(dataAfterAddNew))
+    writeFileSync(`./data/${filename}.json`, JSON.stringify(dataAfterAddNew))
     return true
 }
 
@@ -28,7 +28,7 @@ export const updateOne = (id: string | number, filename: string, updatedData: Da
     const data = JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
     if (!data.some((element: Data) => element.id === id)) return false
     const dataAfterEdit = data.map((element: Data) => element.id === id ? updatedData : element)
-    writeFileSync(`./src/data/${filename}.json`, JSON.stringify(dataAfterEdit))
+    writeFileSync(`./data/${filename}.json`, JSON.stringify(dataAfterEdit))
     return true
 }
 
@@ -36,6 +36,6 @@ export const deleteOne = (id: string | number, filename: string): boolean => {
     const data = JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
     if (!data.some((element: Data) => element.id === id)) return false
     const dataAfterDelete = data.filter((element: Data) => element.id !== id)
-    writeFileSync(`./src/data/${filename}.json`, JSON.stringify(dataAfterDelete))
+    writeFileSync(`./data/${filename}.json`, JSON.stringify(dataAfterDelete))
     return true
 }

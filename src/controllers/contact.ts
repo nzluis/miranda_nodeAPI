@@ -45,9 +45,8 @@ export const createContact = (req: Request, res: Response, next: NextFunction) =
 }
 export const editContact = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
         const response: ContactResponse = { data: req.body, ok: true }
-        if (!updateOne(Number(id), 'contacts', req.body)) res.send('Unknown ID')
+        if (!updateOne(req.body, 'contacts')) res.send('Unknown ID')
         else if (!response.ok) {
             res.status(500).send('Not possible to access DB')
         }

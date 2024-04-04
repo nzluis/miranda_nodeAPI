@@ -45,9 +45,8 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 }
 export const editUser = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
         const response: UserResponse = { data: req.body, ok: true }
-        if (!updateOne(id, 'users', req.body)) res.send('Unknown ID')
+        if (!updateOne(req.body, 'users')) res.send('Unknown ID')
         else if (!response.ok) {
             res.status(500).send('Not possible to access DB')
         }

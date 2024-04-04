@@ -4,14 +4,14 @@ import { delay } from '../utils/delay'
 import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/dataServices'
 
 type BookingResponse = {
-    data: BookingData | BookingData[] | undefined
+    data: BookingData | BookingData[] | null
     ok: boolean
 }
 
 export const getBookings = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const response: BookingResponse = await delay({ data: fetchAll('bookings'), ok: true })
-        if (!response.ok) res.status(502).send('Data not found')
+        if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {
         next(error)
@@ -20,37 +20,29 @@ export const getBookings = async (req: Request, res: Response, next: NextFunctio
 export const getBookingById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response = await delay({ data: fetchOne(id, 'bookings'), ok: true })
-        if (!response.ok) res.status(500).send('Not possible to access DB')
-        else if (!response.data) res.status(404).send('Booking ID not found')
+        const response: BookingResponse = await delay(fetchOne(id, 'bookings'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Booking ID not found' })
         else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
-export const createBooking = (req: Request, res: Response, next: NextFunction) => {
+export const createBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: BookingResponse = { data: req.body, ok: true }
-        if (!addNew(req.body, 'bookings')) res.send('ID already exists')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
-        else {
+        const response: BookingResponse = await delay(addNew(req.body, 'bookings'))
+        if (!response.ok) {
+            res.status(409).send('ID already exists')
             console.log('Successfully created')
-            res.send(response.data)
         }
+        else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
-export const editBooking = (req: Request, res: Response, next: NextFunction) => {
+export const editBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
-        const response: BookingResponse = { data: req.body, ok: true }
-        if (!updateOne(id, 'bookings', req.body)) res.send('Unknown ID')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
+        const response: BookingResponse = await delay(updateOne(req.body, 'bookings'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Booking ID not found' })
         else {
             console.log('Successfully edited')
             res.json(response.data)
@@ -59,17 +51,14 @@ export const editBooking = (req: Request, res: Response, next: NextFunction) => 
         next(error)
     }
 }
-export const deleteBooking = (req: Request, res: Response, next: NextFunction) => {
+export const deleteBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response: { data: BookingData, ok: boolean } = { data: req.body, ok: true }
-        if (!deleteOne(id, 'bookings')) res.send('Unknown ID')
-        else if (!response.ok) {
-            res.status(500).send('Not possible to access DB')
-        }
+        const response: BookingResponse = await delay(deleteOne(id, 'bookings'))
+        if (!response.ok) res.status(404).json({ error: true, message: 'Booking ID not found' })
         else {
             console.log('Successfully deleted')
-            res.json(response.data!.id)
+            res.json(response.data)
         }
     } catch (error) {
         next(error)

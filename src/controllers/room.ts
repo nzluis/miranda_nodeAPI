@@ -45,9 +45,8 @@ export const createRoom = (req: Request, res: Response, next: NextFunction) => {
 }
 export const editRoom = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
         const response: RoomResponse = { data: req.body, ok: true }
-        if (!updateOne(id, 'rooms', req.body)) res.send('Unknown ID')
+        if (!updateOne(req.body, 'rooms')) res.send('Unknown ID')
         else if (!response.ok) {
             res.status(500).send('Not possible to access DB')
         }

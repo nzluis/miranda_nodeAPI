@@ -7,9 +7,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, secretKey, (err: any, user: any) => {
+    jwt.verify(token, secretKey, (err: any) => {
         if (err) return res.sendStatus(403)
-        console.log(user)
         next()
     })
 }

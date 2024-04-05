@@ -455,7 +455,7 @@ describe('Users Tests', () => {
       .set('Authorization', wrongToken)
     expect(res.statusCode).toEqual(403)
   })
-  test('GET /users has a response body length of 40 [devMode]', async () => {
+  test('GET /users has a response body length of 20 [devMode]', async () => {
     const res = await request(app)
       .get('/users')
       .set('Authorization', token)

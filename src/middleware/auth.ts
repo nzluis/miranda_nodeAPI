@@ -8,11 +8,11 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
     try {
-        jwt.verify(token, secretKey, (err: any) => {
-            if (err) return res.sendStatus(403)
-            next()
-        })
+        const user = jwt.verify(token, secretKey)
+        if (!user) return res.sendStatus(403)
+        next()
     } catch (error) {
-        next(error)
+        console.error(error)
+        throw new Error('Auth internal error')
     }
 }

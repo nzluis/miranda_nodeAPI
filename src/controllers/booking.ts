@@ -27,21 +27,21 @@ export const getBookingById = async (req: Request, res: Response, next: NextFunc
         next(error)
     }
 }
-export const createBooking = async (req: Request, res: Response, next: NextFunction) => {
+export const createBooking = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: BookingResponse = await delay(addNew(req.body, 'bookings'))
-        if (!response.ok) {
-            res.status(409).send('ID already exists')
+        const response = addNew(req.body, 'bookings')
+        if (!response.ok) res.status(409).json({ error: true, message: 'ID already exists' })
+        else {
             console.log('Successfully created')
+            res.json(response.data)
         }
-        else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
-export const editBooking = async (req: Request, res: Response, next: NextFunction) => {
+export const editBooking = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: BookingResponse = await delay(updateOne(req.body, 'bookings'))
+        const response = updateOne(req.body, 'bookings')
         if (!response.ok) res.status(404).json({ error: true, message: 'Booking ID not found' })
         else {
             console.log('Successfully edited')
@@ -51,10 +51,10 @@ export const editBooking = async (req: Request, res: Response, next: NextFunctio
         next(error)
     }
 }
-export const deleteBooking = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteBooking = (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response: BookingResponse = await delay(deleteOne(id, 'bookings'))
+        const response = deleteOne(id, 'bookings')
         if (!response.ok) res.status(404).json({ error: true, message: 'Booking ID not found' })
         else {
             console.log('Successfully deleted')

@@ -6,7 +6,7 @@ package:
     - "package.json"
     - "node_modules/**"
     - "dist/**"
-    - "data/**"
+    - "tmp/**"
     - "index.html"
 provider:
   name: aws

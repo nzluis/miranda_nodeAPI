@@ -18,7 +18,7 @@ export const fetchAll = (filename: string): { data: ArrayOfData, ok: boolean } =
 }
 
 export const fetchOne = (id: string | number, filename: string): DataResponse => {
-    const data = JSON.parse(readFileSync(`./tmp/${filename}.json`, 'utf-8'))
+    const data: Data = JSON.parse(readFileSync(`./tmp/${filename}.json`, 'utf-8'))
         .find((element: Data) => element.id.toString() === id)
     if (!data) return { data: null, ok: false }
     return { data, ok: true }
@@ -42,8 +42,7 @@ export const updateOne = (updatedData: Data, filename: string): DataResponse => 
 
 export const deleteOne = (id: string | number, filename: string): DataResponse => {
     const data: ArrayOfData = JSON.parse(readFileSync(`./tmp/${filename}.json`, 'utf-8'))
-    const deletedData: Data = JSON.parse(readFileSync(`./tmp/${filename}.json`, 'utf-8'))
-        .find((element: Data) => element.id.toString() === id)
+    const deletedData = data.find((element: Data) => element.id.toString() === id)
     if (!deletedData) return { data: null, ok: false }
     const dataAfterDelete = data.filter((element: Data) => element.id.toString() !== id)
     writeFileSync(`./tmp/${filename}.json`, JSON.stringify(dataAfterDelete))

@@ -11,8 +11,10 @@ type DataResponse = {
     ok: boolean
 }
 
-export const fetchAll = (filename: string): ArrayOfData | [] => {
-    return JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
+export const fetchAll = (filename: string): { data: ArrayOfData, ok: boolean } => {
+    const data: ArrayOfData = JSON.parse(readFileSync(`./data/${filename}.json`, 'utf-8'))
+    if (!data || data.length === 0) return { data: [], ok: false }
+    return { data, ok: true }
 }
 
 export const fetchOne = (id: string | number, filename: string): DataResponse => {

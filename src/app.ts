@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { bookingsRouter } from './routes/booking'
 import { roomsRouter } from './routes/room'
 import { contactsRouter } from './routes/contact'
@@ -25,7 +25,7 @@ app.use('/rooms', authMiddleware, roomsRouter)
 app.use('/contacts', authMiddleware, contactsRouter)
 app.use('/users', authMiddleware, usersRouter)
 
-app.use((error: Error, _req: Request, res: Response) => {
+app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error(error)
     return res.status(500).json({ message: 'Error from Server' })
 })

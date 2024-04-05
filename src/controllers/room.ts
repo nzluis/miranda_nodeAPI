@@ -10,7 +10,7 @@ type RoomResponse = {
 
 export const getRooms = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = await delay({ data: fetchAll('rooms'), ok: true })
+        const response: RoomResponse = await delay(fetchAll('rooms'))
         if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {

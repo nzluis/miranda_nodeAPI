@@ -10,7 +10,7 @@ type UserResponse = {
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: UserResponse = await delay({ data: fetchAll('users'), ok: true })
+        const response: UserResponse = await delay(fetchAll('users'))
         if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {

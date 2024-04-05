@@ -10,7 +10,7 @@ type ContactResponse = {
 
 export const getContacts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: ContactResponse = await delay({ data: fetchAll('contacts'), ok: true })
+        const response: ContactResponse = await delay(fetchAll('contacts'))
         if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {

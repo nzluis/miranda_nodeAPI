@@ -10,7 +10,7 @@ type BookingResponse = {
 
 export const getBookings = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: BookingResponse = await delay({ data: fetchAll('bookings'), ok: true })
+        const response: BookingResponse = await delay(fetchAll('bookings'))
         if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
         res.json(response.data)
     } catch (error) {

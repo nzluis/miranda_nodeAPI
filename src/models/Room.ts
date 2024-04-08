@@ -16,4 +16,4 @@ const RoomSchema = new Schema<RoomData>({
     status: String,
 })
 
-export const Booking = mongoose.model('Booking', RoomSchema)
+export const Room = mongoose.model('Room', RoomSchema)

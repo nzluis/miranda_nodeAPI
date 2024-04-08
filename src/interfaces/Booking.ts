@@ -1,5 +1,5 @@
 export interface BookingData {
-    id: string
+    _id: string
     order_date: string
     first_name: string
     last_name: string

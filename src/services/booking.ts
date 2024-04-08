@@ -6,7 +6,7 @@ export const fetchAll = async () => {
 }
 
 export const fetchOne = async (id: string) => {
-    return await Booking.findById({ _id: id })
+    return await Booking.findById(id).exec()
 }
 
 export const addNew = async (newAdded: BookingData) => {
@@ -14,7 +14,7 @@ export const addNew = async (newAdded: BookingData) => {
 }
 
 export const updateOne = async (id: string, updatedData: BookingData) => {
-    return await Booking.findByIdAndUpdate(updatedData._id, updatedData)
+    return await Booking.findByIdAndUpdate(id, updatedData)
 }
 
 export const deleteOne = async (id: string) => {

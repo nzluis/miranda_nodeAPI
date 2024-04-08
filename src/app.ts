@@ -7,12 +7,20 @@ import { loginRouter } from './controllers/login'
 import dotenv from 'dotenv'
 import path from 'path'
 import { authMiddleware } from './middleware/auth'
+import mongoose from 'mongoose'
 
 dotenv.config()
 
 export const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect(process.env.MONGODB_URL!).then(() => {
+    console.log('Connected to mongodb')
+})
+    .catch(() => {
+        console.log('Error connecting mongodb')
+    })
 
 app.get('/', (_req: Request, res: Response) => {
     const filePath = path.resolve(process.cwd(), 'index.html');

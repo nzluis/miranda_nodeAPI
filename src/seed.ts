@@ -1,12 +1,19 @@
 import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose'
+import { ObjectId } from 'mongodb'
 import bcrypt from "bcryptjs";
 import { UserData } from './interfaces/User';
 import { ContactData } from './interfaces/Contact';
 import { RoomData } from './interfaces/Room';
 import { BookingData } from './interfaces/Booking';
+import dotenv from 'dotenv'
+import { Room } from './models/Room';
+dotenv.config()
+
+let roomsId: ObjectId[] | [] = []
 
 function createBooking(): BookingData {
+    const randomNum = Math.floor(Math.random() * 10)
     return {
         order_date: new Date(faker.date.anytime()).getTime().toString(),
         first_name: faker.person.firstName(),
@@ -14,8 +21,7 @@ function createBooking(): BookingData {
         check_in: new Date(faker.date.anytime()).getTime().toString(),
         check_out: new Date(faker.date.anytime()).getTime().toString(),
         request: faker.lorem.sentence(20),
-        room_type: faker.helpers.arrayElement(['Single Bed', 'Double Bed', 'Double Superior', 'Suite']),
-        room_number: faker.helpers.rangeToNumber({ min: 1, max: 100 }).toString(),
+        room: roomsId[randomNum]._id,
         status: faker.helpers.arrayElement(['In Progress', 'Check Out', 'Check In'])
     };
 }
@@ -62,30 +68,26 @@ function createUser() {
 }
 
 export async function seedDB() {
+    await mongoose.connect(process.env.MONGODB_URL!)
     const client = mongoose.connection.getClient()
     try {
-        const bookingsCollection = client.db("mirandaDB").collection("bookings");
         const roomsCollection = client.db("mirandaDB").collection("rooms");
         const contactsCollection = client.db("mirandaDB").collection("contacts");
         const usersCollection = client.db("mirandaDB").collection("users");
 
-        await bookingsCollection.drop();
         await roomsCollection.drop();
         await contactsCollection.drop();
         await usersCollection.drop();
 
-        const bookings = [];
         const rooms = [];
         const contacts = [];
         const users = [];
 
         for (let i = 0; i < 10; i++) {
-            const newBooking = createBooking()
             const newRoom = createRoom()
             const newContact = createContact()
             const newUser = createUser()
 
-            bookings.push(newBooking);
             rooms.push(newRoom);
             contacts.push(newContact);
             users.push(newUser);
@@ -93,7 +95,7 @@ export async function seedDB() {
         await roomsCollection.insertMany(rooms);
         await contactsCollection.insertMany(contacts);
         await usersCollection.insertMany(users);
-        await bookingsCollection.insertMany(bookings);
+        roomsId = await Room.find({}, { _id: 1 })
 
         console.log("Database seeded! :)");
         client.close();
@@ -101,4 +103,25 @@ export async function seedDB() {
         console.log(err);
     }
 }
+
+export async function seedBookings() {
+    await mongoose.connect(process.env.MONGODB_URL!)
+    const client = mongoose.connection.getClient()
+    try {
+        const bookingsCollection = client.db("mirandaDB").collection("bookings");
+        await bookingsCollection.drop();
+        const bookings = [];
+        for (let i = 0; i < 10; i++) {
+            const newBooking = createBooking()
+            bookings.push(newBooking);
+        }
+        await bookingsCollection.insertMany(bookings);
+        console.log("Bookings Collection seeded! :)");
+        client.close();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 seedDB()
+seedBookings()

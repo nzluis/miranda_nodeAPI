@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/user'
+import bcrypt from "bcryptjs";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -22,7 +23,11 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 }
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await addNew(req.body)
+        const hashedUser = {
+            ...req.body,
+            password: bcrypt.hashSync(req.body.password, 10)
+        }
+        const user = await addNew(hashedUser)
         if (!user) res.status(409).json({ error: true, message: 'ID already exists' })
         else {
             console.log('Successfully created')

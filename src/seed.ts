@@ -1,8 +1,12 @@
 import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose'
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { UserData } from './interfaces/User';
+import { ContactData } from './interfaces/Contact';
+import { RoomData } from './interfaces/Room';
+import { BookingData } from './interfaces/Booking';
 
-function createBooking() {
+function createBooking(): BookingData {
     return {
         order_date: new Date(faker.date.anytime()).getTime().toString(),
         first_name: faker.person.firstName(),
@@ -15,7 +19,7 @@ function createBooking() {
         status: faker.helpers.arrayElement(['In Progress', 'Check Out', 'Check In'])
     };
 }
-function createRoom() {
+function createRoom(): RoomData {
     return {
         photo: 'https://picsum.photos/100/50',
         room_number: faker.helpers.rangeToNumber({ min: 1, max: 100 }).toString(),
@@ -29,7 +33,7 @@ function createRoom() {
         status: faker.helpers.arrayElement(['Available', 'Booked']),
     }
 }
-function createContact() {
+function createContact(): ContactData {
     return {
         full_name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -42,7 +46,7 @@ function createContact() {
 }
 function createUser() {
     const raw_password = faker.internet.password()
-    const newUser = {
+    const newUser: UserData = {
         photo: 'https://i.pravatar.cc/50',
         full_name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -86,10 +90,10 @@ export async function seedDB() {
             contacts.push(newContact);
             users.push(newUser);
         }
-        await bookingsCollection.insertMany(bookings);
         await roomsCollection.insertMany(rooms);
         await contactsCollection.insertMany(contacts);
         await usersCollection.insertMany(users);
+        await bookingsCollection.insertMany(bookings);
 
         console.log("Database seeded! :)");
         client.close();
@@ -97,3 +101,4 @@ export async function seedDB() {
         console.log(err);
     }
 }
+seedDB()

@@ -4,7 +4,7 @@ import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/bo
 export const getBookings = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bookings = await fetchAll()
-        // if (!bookings) res.status(404).json({ error: true, message: 'Data not found' })
+        if (!bookings) res.status(404).json({ error: true, message: 'Data not found' })
         return res.json(bookings)
     } catch (error) {
         next(error)
@@ -14,8 +14,8 @@ export const getBookingById = async (req: Request, res: Response, next: NextFunc
     try {
         const id = req.params.id
         const booking = await fetchOne(id)
-        if (!booking) res.status(404).json({ error: true, message: 'Booking ID not found' })
-        else res.json(booking)
+        if (!booking) return res.status(404).json({ error: true, message: 'Booking ID not found' })
+        else return res.json(booking)
     } catch (error) {
         next(error)
     }
@@ -36,11 +36,11 @@ export const editBooking = async (req: Request, res: Response, next: NextFunctio
     try {
         const id = req.params.id
         const updatedBooking = await updateOne(id, req.body)
-        if (!updatedBooking) res.status(404).json({ error: true, message: 'Booking ID not found' })
-        else {
-            console.log('Successfully edited')
-            res.json(updatedBooking)
-        }
+        // if (!updatedBooking) res.status(404).json({ error: true, message: 'Booking ID not found' })
+        // else {
+        console.log('Successfully edited')
+        res.json(updatedBooking)
+        // }
     } catch (error) {
         next(error)
     }

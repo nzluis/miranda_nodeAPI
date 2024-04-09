@@ -1,18 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import { RoomData } from '../interfaces/Room'
-import { delay } from '../utils/delay'
-import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/dataServices'
-
-type RoomResponse = {
-    data: RoomData | RoomData[] | null
-    ok: boolean
-}
+import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/room'
 
 export const getRooms = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = await delay(fetchAll('rooms'))
-        if (!response.ok) res.status(404).json({ error: true, message: 'Data not found' })
-        res.json(response.data)
+        const rooms = await fetchAll()
+        if (!rooms) res.status(404).json({ error: true, message: 'Data not found' })
+        return res.json(rooms)
     } catch (error) {
         next(error)
     }
@@ -20,33 +13,34 @@ export const getRooms = async (req: Request, res: Response, next: NextFunction) 
 export const getRoomById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response: RoomResponse = await delay(fetchOne(id, 'rooms'))
-        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
-        else res.json(response.data)
+        const room = await fetchOne(id)
+        if (!room) return res.status(404).json({ error: true, message: 'Room ID not found' })
+        else return res.json(room)
     } catch (error) {
         next(error)
     }
 }
 export const createRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = await delay(addNew(req.body, 'rooms'))
-        if (!response.ok) {
-            res.status(409).send('ID already exists')
+        const room = await addNew(req.body)
+        if (!room) res.status(409).json({ error: true, message: 'ID already exists' })
+        else {
             console.log('Successfully created')
+            res.json(room)
         }
-        else res.json(response.data)
     } catch (error) {
         next(error)
     }
 }
 export const editRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response: RoomResponse = await delay(updateOne(req.body, 'rooms'))
-        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
-        else {
-            console.log('Successfully edited')
-            res.json(response.data)
-        }
+        const id = req.params.id
+        const updatedRoom = await updateOne(id, req.body)
+        // if (!updatedRoom) res.status(404).json({ error: true, message: 'Room ID not found' })
+        // else {
+        console.log('Successfully edited')
+        res.json(updatedRoom)
+        // }
     } catch (error) {
         next(error)
     }
@@ -54,11 +48,11 @@ export const editRoom = async (req: Request, res: Response, next: NextFunction) 
 export const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id
-        const response: RoomResponse = await delay(deleteOne(id, 'rooms'))
-        if (!response.ok) res.status(404).json({ error: true, message: 'Room ID not found' })
+        const deletedRoom = await deleteOne(id)
+        if (!deletedRoom) res.status(404).json({ error: true, message: 'Room ID not found' })
         else {
             console.log('Successfully deleted')
-            res.json(response.data)
+            res.json(deleteRoom)
         }
     } catch (error) {
         next(error)

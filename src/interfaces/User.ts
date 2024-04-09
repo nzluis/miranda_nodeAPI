@@ -1,5 +1,4 @@
 export interface UserData {
-    _id: string
     photo: string
     full_name: string
     email: string

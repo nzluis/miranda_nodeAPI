@@ -3,16 +3,15 @@ import { UserData } from '../interfaces/User';
 const { Schema } = mongoose;
 
 const UserSchema = new Schema<UserData>({
-    _id: String,
-    photo: String,
-    full_name: String,
-    email: String,
-    start_date: String,
-    description: String,
-    position: String,
-    phone: String,
-    status: String,
-    password: String,
+    photo: { type: String, required: true },
+    full_name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    start_date: { type: String, required: true },
+    description: { type: String, required: true },
+    position: { type: String, required: true },
+    phone: { type: String, required: true },
+    status: { type: String, required: true },
+    password: { type: String, required: true },
 })
 
-export const User = mongoose.model('User', UserSchema)
+export const User = mongoose.model<UserData>('User', UserSchema)

@@ -8,7 +8,7 @@ const ContactSchema = new Schema<ContactData>({
     phone: { type: String, required: true },
     subject: { type: String, required: true },
     message: { type: String, required: true },
-    status: { type: String, required: true },
+    status: { type: String, enum: ['Unread', 'Read'], required: true },
     date: { type: String, required: true },
 })
 

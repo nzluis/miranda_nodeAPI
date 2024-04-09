@@ -11,7 +11,7 @@ const RoomSchema = new Schema<RoomData>({
     discount: { type: String, required: true },
     cancelation: { type: String, required: true },
     amenities: [{ type: String, required: true }],
-    status: { type: String, required: true },
+    status: { type: String, enum: ['Available', 'Booked'], required: true },
 })
 
 export const Room = mongoose.model<RoomData>('Room', RoomSchema)

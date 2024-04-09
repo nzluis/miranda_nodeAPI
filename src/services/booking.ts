@@ -2,11 +2,11 @@ import { BookingData } from '../interfaces/Booking'
 import { Booking } from '../models/Booking'
 
 export const fetchAll = async () => {
-    return await Booking.find()
+    return await Booking.find().populate('room').exec()
 }
 
 export const fetchOne = async (id: string) => {
-    return await Booking.findById(id).exec()
+    return await Booking.findById(id).populate('room').exec()
 }
 
 export const addNew = async (newAdded: BookingData) => {

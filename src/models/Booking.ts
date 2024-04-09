@@ -7,8 +7,7 @@ const BookingSchema = new Schema({
     check_in: { type: String, required: true },
     check_out: { type: String, required: true },
     request: { type: String, required: true },
-    room_type: { type: String, enum: ['Single Bed', 'Double Bed', 'Double Superior', 'Suite'], required: true },
-    room_number: { type: String, required: true },
+    room: { type: Schema.Types.ObjectId, ref: 'Room' },
     status: { type: String, enum: ['In Progress', 'Check Out', 'Check In'], required: true }
 })
 

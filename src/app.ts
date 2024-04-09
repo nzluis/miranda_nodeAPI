@@ -35,5 +35,5 @@ app.use('/users', authMiddleware, usersRouter)
 
 app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error(error)
-    return res.status(500).json({ message: 'Error from Server' })
+    return res.status(500).json({ message: 'Error from Server', error: error })
 })

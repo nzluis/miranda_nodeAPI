@@ -16,7 +16,7 @@ loginRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
             const token = jwt.sign({ email: user.email, password: user.password }, process.env.SECRET_KEY as string)
             res.json({ AUTH_OK: 'Login successfully', token: token })
         }
-        else res.json({ error: true, message: 'Incorrect Authentication' })
+        else res.status(403).json({ error: true, message: 'Incorrect Authentication' })
     } catch (error) {
         next(error)
     }

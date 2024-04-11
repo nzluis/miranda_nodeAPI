@@ -11,16 +11,16 @@ import { Room } from './models/Room';
 dotenv.config()
 
 const roomsId = [
-    { _id: new ObjectId('66156224aa04882e48e714de') },
-    { _id: new ObjectId('66156224aa04882e48e714df') },
-    { _id: new ObjectId('66156224aa04882e48e714e0') },
-    { _id: new ObjectId('66156224aa04882e48e714e1') },
-    { _id: new ObjectId('66156224aa04882e48e714e2') },
-    { _id: new ObjectId('66156224aa04882e48e714e3') },
-    { _id: new ObjectId('66156224aa04882e48e714e4') },
-    { _id: new ObjectId('66156224aa04882e48e714e5') },
-    { _id: new ObjectId('66156224aa04882e48e714e6') },
-    { _id: new ObjectId('66156224aa04882e48e714e7') }
+    { _id: new ObjectId('6617bcdc9e179f98f0c98973') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98974') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98975') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98976') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98977') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98978') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c98979') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c9897a') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c9897b') },
+    { _id: new ObjectId('6617bcdc9e179f98f0c9897c') }
 ]
 
 function createRoom(): RoomData {
@@ -59,14 +59,14 @@ function createUser() {
         position: faker.helpers.arrayElement(['Manager', 'Room Service', 'Receptionist']),
         phone: faker.phone.number(),
         status: faker.helpers.arrayElement(['Active', 'Inactive']),
-        password: bcrypt.hashSync(raw_password, 10),
+        password: bcrypt.hashSync(raw_password, bcrypt.genSaltSync(10)),
     }
     console.log(`${newUser.email}: ${raw_password}`)
     return newUser
 }
 
 export async function seedDB(database: string) {
-    await mongoose.connect(process.env.MONGODB_URL!)
+    await mongoose.connect(database === 'test' ? process.env.MONGODB_URL_TEST! : process.env.MONGODB_URL!)
     const client = mongoose.connection.getClient()
     try {
         const roomsCollection = client.db(database).collection("rooms");
@@ -117,7 +117,7 @@ function createBooking(): BookingData {
 }
 
 export async function seedBookings(database: string) {
-    await mongoose.connect(process.env.MONGODB_URL!)
+    await mongoose.connect(database === 'test' ? process.env.MONGODB_URL_TEST! : process.env.MONGODB_URL!)
     const client = mongoose.connection.getClient()
     try {
         const bookingsCollection = client.db(database).collection("bookings");
@@ -138,4 +138,4 @@ export async function seedBookings(database: string) {
 // seedDB('mirandaDB')
 // seedBookings('mirandaDB')
 // seedDB('test')
-// seedBookings('test')
+seedBookings('test')

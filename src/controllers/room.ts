@@ -4,7 +4,6 @@ import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/ro
 export const getRooms = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const rooms = await fetchAll()
-        if (!rooms) res.status(404).json({ error: true, message: 'Data not found' })
         return res.json(rooms)
     } catch (error) {
         next(error)
@@ -12,10 +11,9 @@ export const getRooms = async (req: Request, res: Response, next: NextFunction) 
 }
 export const getRoomById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const room = await fetchOne(id)
-        if (!room) return res.status(404).json({ error: true, message: 'Room ID not found' })
-        else return res.json(room)
+        res.json(room)
     } catch (error) {
         next(error)
     }
@@ -23,37 +21,29 @@ export const getRoomById = async (req: Request, res: Response, next: NextFunctio
 export const createRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const room = await addNew(req.body)
-        if (!room) res.status(409).json({ error: true, message: 'ID already exists' })
-        else {
-            console.log('Successfully created')
-            res.json(room)
-        }
+        console.log('Successfully created')
+        res.json(room)
+        // }
     } catch (error) {
         next(error)
     }
 }
 export const editRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const updatedRoom = await updateOne(id, req.body)
-        // if (!updatedRoom) res.status(404).json({ error: true, message: 'Room ID not found' })
-        // else {
         console.log('Successfully edited')
         res.json(updatedRoom)
-        // }
     } catch (error) {
         next(error)
     }
 }
 export const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const deletedRoom = await deleteOne(id)
-        if (!deletedRoom) res.status(404).json({ error: true, message: 'Room ID not found' })
-        else {
-            console.log('Successfully deleted')
-            res.json(deleteRoom)
-        }
+        console.log('Successfully deleted')
+        res.json(deletedRoom)
     } catch (error) {
         next(error)
     }

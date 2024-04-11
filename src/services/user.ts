@@ -20,12 +20,10 @@ export const addNew = async (newAdded: UserData) => {
 }
 
 export const updateOne = async (id: string, updatedData: UserData) => {
-    const user = await User.findOne({ email: updatedData.email })
-    if (!user) throw new ApiError(404, 'Email Not Found')
+    const user = await User.findById(id)
+    if (!user) throw new ApiError(404, 'User Id Not Found')
     const checkedPasswordUser = checkPassword(updatedData, user)
-    const editedUser = await User.findByIdAndUpdate(id, checkedPasswordUser, { new: true })
-    if (!editedUser) throw new ApiError(404, 'User Id Not Found')
-    return editedUser
+    return await User.findByIdAndUpdate(id, checkedPasswordUser, { new: true })
 }
 
 export const deleteOne = async (id: string) => {

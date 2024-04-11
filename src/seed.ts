@@ -66,7 +66,7 @@ function createUser() {
 }
 
 export async function seedDB(database: string) {
-    await mongoose.connect(database === 'test' ? process.env.MONGODB_URL_TEST! : process.env.MONGODB_URL!)
+    await mongoose.connect(database === 'test' ? process.env.MONGODB_URI_TEST! : process.env.MONGODB_URI!)
     const client = mongoose.connection.getClient()
     try {
         const roomsCollection = client.db(database).collection("rooms");
@@ -117,7 +117,7 @@ function createBooking(): BookingData {
 }
 
 export async function seedBookings(database: string) {
-    await mongoose.connect(database === 'test' ? process.env.MONGODB_URL_TEST! : process.env.MONGODB_URL!)
+    await mongoose.connect(database === 'test' ? process.env.MONGODB_URI_TEST! : process.env.MONGODB_URI!)
     const client = mongoose.connection.getClient()
     try {
         const bookingsCollection = client.db(database).collection("bookings");
@@ -138,4 +138,4 @@ export async function seedBookings(database: string) {
 // seedDB('mirandaDB')
 // seedBookings('mirandaDB')
 // seedDB('test')
-seedBookings('test')
+// seedBookings('test')

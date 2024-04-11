@@ -16,7 +16,7 @@ export const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGODB_URL_TEST!)
+mongoose.connect(process.env.MONGODB_URI!)
     .then(() => {
         console.log('Connected to mongodb')
     })

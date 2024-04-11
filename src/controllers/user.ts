@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await fetchAll()
-        if (!users) res.status(404).json({ error: true, message: 'Data not found' })
         return res.json(users)
     } catch (error) {
         next(error)
@@ -13,10 +12,9 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 }
 export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const user = await fetchOne(id)
-        if (!user) return res.status(404).json({ error: true, message: 'User ID not found' })
-        else return res.json(user)
+        res.json(user)
     } catch (error) {
         next(error)
     }
@@ -25,40 +23,32 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     try {
         const hashedUser = {
             ...req.body,
-            password: bcrypt.hashSync(req.body.password, 10)
+            password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
         }
         const user = await addNew(hashedUser)
-        if (!user) res.status(409).json({ error: true, message: 'ID already exists' })
-        else {
-            console.log('Successfully created')
-            res.json(user)
-        }
+        console.log('Successfully created')
+        res.json(user)
+        // }
     } catch (error) {
         next(error)
     }
 }
 export const editUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const updatedUser = await updateOne(id, req.body)
-        // if (!updatedUser) res.status(404).json({ error: true, message: 'User ID not found' })
-        // else {
         console.log('Successfully edited')
         res.json(updatedUser)
-        // }
     } catch (error) {
         next(error)
     }
 }
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const deletedUser = await deleteOne(id)
-        if (!deletedUser) res.status(404).json({ error: true, message: 'User ID not found' })
-        else {
-            console.log('Successfully deleted')
-            res.json(deleteUser)
-        }
+        console.log('Successfully deleted')
+        res.json(deletedUser)
     } catch (error) {
         next(error)
     }

@@ -1,12 +1,18 @@
 import { UserData } from '../interfaces/User'
 import { User } from '../models/User'
+import { checkPassword } from '../utils/checkPassword'
+import { ApiError } from '../utils/handleErrors'
 
 export const fetchAll = async () => {
-    return await User.find()
+    const users = await User.find()
+    if (!users) throw new ApiError(404, 'Data Not Found')
+    return users
 }
 
 export const fetchOne = async (id: string) => {
-    return await User.findById(id).exec()
+    const user = await User.findById(id)
+    if (!user) throw new ApiError(404, 'User Id Not Found')
+    return user
 }
 
 export const addNew = async (newAdded: UserData) => {
@@ -14,9 +20,16 @@ export const addNew = async (newAdded: UserData) => {
 }
 
 export const updateOne = async (id: string, updatedData: UserData) => {
-    return await User.findByIdAndUpdate(id, updatedData)
+    const user = await User.findOne({ email: updatedData.email })
+    if (!user) throw new ApiError(404, 'Email Not Found')
+    const checkedPasswordUser = checkPassword(updatedData, user)
+    const editedUser = await User.findByIdAndUpdate(id, checkedPasswordUser, { new: true })
+    if (!editedUser) throw new ApiError(404, 'User Id Not Found')
+    return editedUser
 }
 
 export const deleteOne = async (id: string) => {
-    return await User.findByIdAndDelete(id)
+    const deletedUser = await User.findByIdAndDelete(id)
+    if (!deletedUser) throw new ApiError(404, 'User Id Not Found')
+    return deletedUser
 }

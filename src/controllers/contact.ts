@@ -4,7 +4,6 @@ import { addNew, deleteOne, fetchAll, fetchOne, updateOne } from '../services/co
 export const getContacts = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const contacts = await fetchAll()
-        if (!contacts) res.status(404).json({ error: true, message: 'Data not found' })
         return res.json(contacts)
     } catch (error) {
         next(error)
@@ -12,10 +11,9 @@ export const getContacts = async (req: Request, res: Response, next: NextFunctio
 }
 export const getContactById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const contact = await fetchOne(id)
-        if (!contact) return res.status(404).json({ error: true, message: 'Contact ID not found' })
-        else return res.json(contact)
+        res.json(contact)
     } catch (error) {
         next(error)
     }
@@ -23,37 +21,29 @@ export const getContactById = async (req: Request, res: Response, next: NextFunc
 export const createContact = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const contact = await addNew(req.body)
-        if (!contact) res.status(409).json({ error: true, message: 'ID already exists' })
-        else {
-            console.log('Successfully created')
-            res.json(contact)
-        }
+        console.log('Successfully created')
+        res.json(contact)
+        // }
     } catch (error) {
         next(error)
     }
 }
 export const editContact = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const updatedContact = await updateOne(id, req.body)
-        // if (!updatedContact) res.status(404).json({ error: true, message: 'Contact ID not found' })
-        // else {
         console.log('Successfully edited')
         res.json(updatedContact)
-        // }
     } catch (error) {
         next(error)
     }
 }
 export const deleteContact = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id
+        const { id } = req.params
         const deletedContact = await deleteOne(id)
-        if (!deletedContact) res.status(404).json({ error: true, message: 'Contact ID not found' })
-        else {
-            console.log('Successfully deleted')
-            res.json(deleteContact)
-        }
+        console.log('Successfully deleted')
+        res.json(deletedContact)
     } catch (error) {
         next(error)
     }

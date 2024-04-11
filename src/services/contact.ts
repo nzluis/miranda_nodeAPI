@@ -1,12 +1,17 @@
 import { ContactData } from '../interfaces/Contact'
 import { Contact } from '../models/Contact'
+import { ApiError } from '../utils/handleErrors'
 
 export const fetchAll = async () => {
-    return await Contact.find()
+    const contacts = await Contact.find()
+    if (!contacts) throw new ApiError(404, 'Data Not Found')
+    return contacts
 }
 
 export const fetchOne = async (id: string) => {
-    return await Contact.findById(id).exec()
+    const contact = await Contact.findById(id)
+    if (!contact) throw new ApiError(404, 'Contact Id Not Found')
+    return contact
 }
 
 export const addNew = async (newAdded: ContactData) => {
@@ -14,9 +19,13 @@ export const addNew = async (newAdded: ContactData) => {
 }
 
 export const updateOne = async (id: string, updatedData: ContactData) => {
-    return await Contact.findByIdAndUpdate(id, updatedData)
+    const editContact = await Contact.findByIdAndUpdate(id, updatedData, { new: true })
+    if (!editContact) throw new ApiError(404, 'Contact Id Not Found')
+    return editContact
 }
 
 export const deleteOne = async (id: string) => {
-    return await Contact.findByIdAndDelete(id)
+    const deletedContact = await Contact.findByIdAndDelete(id)
+    if (!deletedContact) throw new ApiError(404, 'Contact Id Not Found')
+    return deletedContact
 }

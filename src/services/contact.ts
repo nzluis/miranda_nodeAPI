@@ -19,9 +19,9 @@ export const addNew = async (newAdded: ContactData) => {
 }
 
 export const updateOne = async (id: string, updatedData: ContactData) => {
-    const editContact = await Contact.findByIdAndUpdate(id, updatedData, { new: true })
-    if (!editContact) throw new ApiError(404, 'Contact Id Not Found')
-    return editContact
+    const editedContact = await Contact.findByIdAndUpdate(id, updatedData, { new: true })
+    if (!editedContact) throw new ApiError(404, 'Contact Id Not Found')
+    return editedContact
 }
 
 export const deleteOne = async (id: string) => {

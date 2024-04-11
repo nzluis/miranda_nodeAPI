@@ -19,9 +19,9 @@ export const addNew = async (newAdded: RoomData) => {
 }
 
 export const updateOne = async (id: string, updatedData: RoomData) => {
-    const editRoom = await Room.findByIdAndUpdate(id, updatedData, { new: true })
-    if (!editRoom) throw new ApiError(404, 'Room Id Not Found')
-    return editRoom
+    const editedRoom = await Room.findByIdAndUpdate(id, updatedData, { new: true })
+    if (!editedRoom) throw new ApiError(404, 'Room Id Not Found')
+    return editedRoom
 }
 
 export const deleteOne = async (id: string) => {

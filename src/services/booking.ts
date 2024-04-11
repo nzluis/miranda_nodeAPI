@@ -19,9 +19,9 @@ export const addNew = async (newAdded: BookingData) => {
 }
 
 export const updateOne = async (id: string, updatedData: BookingData) => {
-    const editBooking = await Booking.findByIdAndUpdate(id, updatedData, { new: true })
-    if (!editBooking) throw new ApiError(404, 'Booking Id Not Found')
-    return editBooking
+    const editedBooking = await Booking.findByIdAndUpdate(id, updatedData, { new: true })
+    if (!editedBooking) throw new ApiError(404, 'Booking Id Not Found')
+    return editedBooking
 }
 
 export const deleteOne = async (id: string) => {

@@ -1,18 +1,17 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt = require('jsonwebtoken')
+import { ApiError } from '../utils/handleErrors'
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const secretKey = process.env.SECRET_KEY
     if (!secretKey) throw new Error('Secret Key is undefined')
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
-    if (token == null) return res.sendStatus(401)
+    if (token == null) throw new ApiError(401, 'Unauthorized Access')
     try {
-        const user = jwt.verify(token, secretKey)
-        if (!user) return res.sendStatus(403)
+        jwt.verify(token, secretKey)
         next()
-    } catch (error) {
-        console.error(error)
-        throw new Error('Auth internal error')
+    } catch (error: any) {
+        throw new ApiError(403, 'Wrong Authentication.Token is not correct')
     }
 }

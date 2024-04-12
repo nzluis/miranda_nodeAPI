@@ -188,9 +188,9 @@ describe('Bookings Tests', () => {
 
   })
   test('PUT /booking/{id}/update successfully', async () => {
-    const userExist = await Booking.findOne({ first_name: 'TEST NAME' })
+    const bookingExist = await Booking.findOne({ first_name: 'TEST NAME' })
     const res = await request(app)
-      .put(`/bookings/${userExist!._id}/update`)
+      .put(`/bookings/${bookingExist!._id}/update`)
       .send({
         "order_date": "1743443405547",
         "first_name": "TEST NAME MODIFIED",
@@ -221,17 +221,19 @@ describe('Bookings Tests', () => {
       })
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
-    expect(await Booking.findOne({ _id: userExist!._id })).toEqual(expect.objectContaining({ first_name: 'TEST NAME MODIFIED' }));
+    const bookingAfterEdit = await Booking.findOne({ _id: bookingExist!._id })
+    expect(bookingAfterEdit).toEqual(expect.objectContaining({ first_name: 'TEST NAME MODIFIED' }));
 
   })
   test('DELETE /booking/{id}/delete successfully', async () => {
-    const userExist = await Booking.findOne({ first_name: 'TEST NAME MODIFIED' })
+    const bookingExist = await Booking.findOne({ first_name: 'TEST NAME MODIFIED' })
     const res = await request(app)
-      .delete(`/bookings/${userExist!._id}/delete`)
+      .delete(`/bookings/${bookingExist!._id}/delete`)
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual(expect.objectContaining({}));
-    expect(await Booking.findOne({ first_name: 'TEST NAME MODIFIED' })).toEqual(expect.objectContaining({}));
+    const bookingAfterEdit = await Booking.findOne({ first_name: 'TEST NAME MODIFIED' })
+    expect(bookingAfterEdit).toEqual(expect.objectContaining({}));
   })
   test('PUT /booking/{wrongId}/update should return a 404 "Booking not found"', async () => {
     const res = await request(app)
@@ -369,9 +371,9 @@ describe('Contacts Tests', () => {
 
   })
   test('PUT /contact/{id}/update successfully', async () => {
-    const userExist = await Contact.findOne({ full_name: 'TEST NAME' })
+    const contactExist = await Contact.findOne({ full_name: 'TEST NAME' })
     const res = await request(app)
-      .put(`/contacts/${userExist!._id}/update`)
+      .put(`/contacts/${contactExist!._id}/update`)
       .send({
         "_id": `${id}`,
         "full_name": "TEST NAME MODIFIED",
@@ -384,17 +386,19 @@ describe('Contacts Tests', () => {
       })
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
-    expect(await Contact.findOne({ _id: userExist!._id })).toEqual(expect.objectContaining({ full_name: 'TEST NAME MODIFIED' }));
+    const contactAfterEdit = await Contact.findOne({ _id: contactExist!._id })
+    expect(contactAfterEdit).toEqual(expect.objectContaining({ full_name: 'TEST NAME MODIFIED' }));
 
   })
   test('DELETE /contact/{id}/delete successfully', async () => {
-    const userExist = await Contact.findOne({ full_name: 'TEST NAME MODIFIED' })
+    const contactExist = await Contact.findOne({ full_name: 'TEST NAME MODIFIED' })
     const res = await request(app)
-      .delete(`/contacts/${userExist!._id}/delete`)
+      .delete(`/contacts/${contactExist!._id}/delete`)
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual(expect.objectContaining({}));
-    expect(await Contact.findOne({ full_name: 'TEST NAME MODIFIED' })).toEqual(expect.objectContaining({}));
+    const contactAfterEdit = await Contact.findOne({ full_name: 'TEST NAME MODIFIED' })
+    expect(contactAfterEdit).toEqual(expect.objectContaining({}));
   })
   test('PUT /contact/{wrongId}/update should return a 404 "Contact not found"', async () => {
     const res = await request(app)
@@ -565,9 +569,9 @@ describe('Rooms Tests', () => {
 
   })
   test('PUT /room/{id}/update successfully', async () => {
-    const userExist = await Room.findOne({ room_number: '999' })
+    const roomExist = await Room.findOne({ room_number: '999' })
     const res = await request(app)
-      .put(`/rooms/${userExist!._id}/update`)
+      .put(`/rooms/${roomExist!._id}/update`)
       .send({
         "photo": "https://picsum.photos/100/50",
         "room_number": "777",
@@ -588,17 +592,19 @@ describe('Rooms Tests', () => {
       })
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
-    expect(await Room.findOne({ _id: userExist!._id })).toEqual(expect.objectContaining({ room_number: '777' }));
+    const roomAfterEdit = await Room.findOne({ _id: roomExist!._id })
+    expect(roomAfterEdit).toEqual(expect.objectContaining({ room_number: '777' }));
 
   })
   test('DELETE /room/{id}/delete successfully', async () => {
-    const userExist = await Room.findOne({ room_number: '777' })
+    const roomExist = await Room.findOne({ room_number: '777' })
     const res = await request(app)
-      .delete(`/rooms/${userExist!._id}/delete`)
+      .delete(`/rooms/${roomExist!._id}/delete`)
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual(expect.objectContaining({}));
-    expect(await Room.findOne({ room_number: '777' })).toEqual(expect.objectContaining({}));
+    const roomAfterEdit = await Room.findOne({ room_number: '777' })
+    expect(roomAfterEdit).toEqual(expect.objectContaining({}));
   })
   test('PUT /room/{wrongId}/update should return a 404 "Room not found"', async () => {
     const res = await request(app)
@@ -775,7 +781,8 @@ describe('Users Tests', () => {
       })
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
-    expect(await User.findOne({ _id: userExist!._id })).toEqual(expect.objectContaining({ full_name: 'TEST NAME MODIFIED' }));
+    const userAfterEdit = await User.findOne({ _id: userExist!._id })
+    expect(userAfterEdit).toEqual(expect.objectContaining({ full_name: 'TEST NAME MODIFIED' }));
 
   })
   test('DELETE /user/{id}/delete successfully', async () => {
@@ -785,7 +792,8 @@ describe('Users Tests', () => {
       .set('Authorization', token)
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual(expect.objectContaining({}));
-    expect(await User.findOne({ full_name: 'TEST NAME MODIFIED' })).toEqual(expect.objectContaining({}));
+    const userAfterEdit = await User.findOne({ full_name: 'TEST NAME MODIFIED' })
+    expect(userAfterEdit).toEqual(expect.objectContaining({}));
   })
   test('PUT /user/{wrongId}/update should return a 404 "User not found"', async () => {
     const res = await request(app)

@@ -3,7 +3,6 @@ import request from 'supertest'
 import { app } from './src/app'
 import { Booking } from './src/models/Booking';
 import mongoose from 'mongoose'
-import { faker } from '@faker-js/faker';
 import { Contact } from './src/models/Contact';
 import { Room } from './src/models/Room';
 import { User } from './src/models/User';

@@ -38,10 +38,10 @@ export const errorHandler = (error: any, _req: Request, res: Response, _next: Ne
     if (error.name === "CastError") error = castErrorHandler(error)
     if (error.code === 11000) error = duplicateErrorHandler(error)
     if (error.name === "ValidationError") error = validationErrorHandler(error)
+    console.error(error.stack)
     res.status(error.statusCode).json({
         status: error.status,
         error: fullError,
         message: error.message,
-        stack: error.stack,
     });
 }

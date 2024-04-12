@@ -1,6 +1,6 @@
 import { RoomData } from '../interfaces/Room'
 import { Room } from '../models/Room'
-import { ApiError } from '../utils/handleErrors'
+import { ApiError } from '../controllers/errorHandler'
 
 export const fetchAll = async () => {
     const rooms = await Room.find()

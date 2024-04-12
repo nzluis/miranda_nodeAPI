@@ -1,7 +1,7 @@
 import { UserData } from '../interfaces/User'
 import { User } from '../models/User'
 import { checkPassword } from '../utils/checkPassword'
-import { ApiError } from '../utils/handleErrors'
+import { ApiError } from '../controllers/errorHandler'
 
 export const fetchAll = async () => {
     const users = await User.find()

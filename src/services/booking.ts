@@ -1,6 +1,6 @@
 import { BookingData } from '../interfaces/Booking'
 import { Booking } from '../models/Booking'
-import { ApiError } from '../utils/handleErrors'
+import { ApiError } from '../controllers/errorHandler'
 
 export const fetchAll = async () => {
     const bookings = await Booking.find().populate('room')

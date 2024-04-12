@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 import { authMiddleware } from './middleware/auth'
 import mongoose from 'mongoose'
-import { errorHandler } from './utils/handleErrors'
+import { errorHandler } from './controllers/errorHandler'
 
 dotenv.config()
 

@@ -1,6 +1,6 @@
 import { ContactData } from '../interfaces/Contact'
 import { Contact } from '../models/Contact'
-import { ApiError } from '../utils/handleErrors'
+import { ApiError } from '../controllers/errorHandler'
 
 export const fetchAll = async () => {
     const contacts = await Contact.find()

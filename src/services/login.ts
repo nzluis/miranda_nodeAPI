@@ -1,5 +1,5 @@
 import { User } from "../models/User"
-import { ApiError } from "../utils/handleErrors"
+import { ApiError } from "../controllers/errorHandler"
 import jwt = require('jsonwebtoken')
 import bcrypt from "bcryptjs";
 

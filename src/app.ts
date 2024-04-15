@@ -9,12 +9,17 @@ import path from 'path'
 import { authMiddleware } from './middleware/auth'
 import mongoose from 'mongoose'
 import { errorHandler } from './controllers/errorHandler'
+import cors from 'cors'
 
 dotenv.config()
 
 export const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    "origin": "http://localhost:5173",
+    "methods": "GET,HEAD,PUT,POST,DELETE",
+}))
 
 mongoose.connect(process.env.MONGODB_URI!)
     .then(() => {

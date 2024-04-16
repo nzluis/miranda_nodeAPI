@@ -34,14 +34,15 @@ export const errorHandler = (error: any, _req: Request, res: Response, _next: Ne
     error.statusCode = error.statusCode || 500
     error.status = error.status || 'error'
     error.message = error.message || 'Internal Server Error'
-    const fullError = error
+    // const fullError = error
     if (error.name === "CastError") error = castErrorHandler(error)
     if (error.code === 11000) error = duplicateErrorHandler(error)
     if (error.name === "ValidationError") error = validationErrorHandler(error)
     console.error(error.stack)
+    // console.error(fullError)
     res.status(error.statusCode).json({
+        statusCode: error.statusCode,
         status: error.status,
-        error: fullError,
         message: error.message,
     });
 }

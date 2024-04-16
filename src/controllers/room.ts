@@ -23,7 +23,6 @@ export const createRoom = async (req: Request, res: Response, next: NextFunction
         const room = await addNew(req.body)
         console.log('Successfully created')
         res.json(room)
-        // }
     } catch (error) {
         next(error)
     }

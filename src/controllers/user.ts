@@ -28,7 +28,6 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
         const user = await addNew(hashedUser)
         console.log('Successfully created')
         res.json(user)
-        // }
     } catch (error) {
         next(error)
     }

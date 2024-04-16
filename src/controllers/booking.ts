@@ -23,7 +23,6 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
         const booking = await addNew(req.body)
         console.log('Successfully created')
         res.json(booking)
-        // }
     } catch (error) {
         next(error)
     }

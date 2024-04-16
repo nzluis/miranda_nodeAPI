@@ -23,7 +23,6 @@ export const createContact = async (req: Request, res: Response, next: NextFunct
         const contact = await addNew(req.body)
         console.log('Successfully created')
         res.json(contact)
-        // }
     } catch (error) {
         next(error)
     }
@@ -43,6 +42,7 @@ export const deleteContact = async (req: Request, res: Response, next: NextFunct
         const { id } = req.params
         const deletedContact = await deleteOne(id)
         console.log('Successfully deleted')
+        console.log(deletedContact)
         res.json(deletedContact)
     } catch (error) {
         next(error)

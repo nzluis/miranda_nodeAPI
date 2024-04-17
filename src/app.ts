@@ -17,11 +17,11 @@ export const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    "origin": "http://localhost:5173",
+    "origin": process.env.NODE_ENV === 'dev' ? 'http://localhost:5173' : "http://dashboardmirandanzluis.s3-website.eu-west-3.amazonaws.com",
     "methods": "GET,HEAD,PUT,POST,DELETE",
 }))
 
-mongoose.connect(process.env.MONGODB_URI!)
+mongoose.connect(process.env.MONGODB_URI_TEST!)
     .then(() => {
         console.log('Connected to mongodb')
     })

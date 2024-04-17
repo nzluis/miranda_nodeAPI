@@ -5,10 +5,10 @@ import { getUser } from '../services/login';
 export const loginRouter = express.Router()
 
 loginRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password }: { email: string, password: string } = req.body
+    const { email, pass }: { email: string, pass: string } = req.body
     try {
-        const authOk = await getUser(email, password)
-        res.status(200).json({ authOk })
+        const authOkData = await getUser(email, pass)
+        res.status(200).json(authOkData)
     } catch (error) {
         next(error)
     }

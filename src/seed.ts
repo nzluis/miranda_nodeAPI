@@ -138,4 +138,4 @@ export async function seedBookings(database: string) {
 // seedDB('mirandaDB')
 // seedBookings('mirandaDB')
 // seedDB('test')
-seedBookings('test')
+// seedBookings('test')

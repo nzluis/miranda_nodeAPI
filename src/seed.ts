@@ -11,16 +11,16 @@ import { Room } from './models/Room';
 dotenv.config()
 
 const roomsId = [
-    { _id: new ObjectId('6617bcdc9e179f98f0c98973') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98974') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98975') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98976') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98977') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98978') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c98979') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c9897a') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c9897b') },
-    { _id: new ObjectId('6617bcdc9e179f98f0c9897c') }
+    { _id: new ObjectId('66225aebf6d85ae5de950c9b') },
+    { _id: new ObjectId('66225aebf6d85ae5de950c9c') },
+    { _id: new ObjectId('66225aebf6d85ae5de950c9d') },
+    { _id: new ObjectId('66225aebf6d85ae5de950c9e') },
+    { _id: new ObjectId('66225aebf6d85ae5de950c9f') },
+    { _id: new ObjectId('66225aebf6d85ae5de950ca0') },
+    { _id: new ObjectId('66225aebf6d85ae5de950ca1') },
+    { _id: new ObjectId('66225aebf6d85ae5de950ca2') },
+    { _id: new ObjectId('66225aebf6d85ae5de950ca3') },
+    { _id: new ObjectId('66225aebf6d85ae5de950ca4') }
 ]
 
 function createRoom(): RoomData {
@@ -138,4 +138,4 @@ export async function seedBookings(database: string) {
 // seedDB('mirandaDB')
 // seedBookings('mirandaDB')
 // seedDB('test')
-// seedBookings('test')
+seedBookings('test')

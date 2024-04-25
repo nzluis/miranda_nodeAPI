@@ -1,31 +1,56 @@
 import { RoomData } from '../interfaces/Room'
-import { Room } from '../models/Room'
 import { ApiError } from '../controllers/errorHandler'
+import { querySQL } from '../utils/sqlQuery'
 
 export const fetchAll = async () => {
-    const rooms = await Room.find()
-    if (!rooms) throw new ApiError(404, 'Data Not Found')
-    return rooms
+    return await querySQL(`SELECT * FROM room`)
 }
 
 export const fetchOne = async (id: string) => {
-    const room = await Room.findById(id)
-    if (!room) throw new ApiError(404, 'Room Id Not Found')
+    const room = await querySQL(`SELECT * FROM room WHERE _id = ?`, [id])
+    if (Object.keys(room).length === 0) throw new ApiError(404, 'Room Id Not Found')
     return room
 }
 
 export const addNew = async (newAdded: RoomData) => {
-    return await new Room(newAdded).save()
+    await querySQL(`INSERT INTO room (
+        cancelation, description, offer, photo, price, discount, room_number, room_type, status) 
+        VALUES (?,?,?,?,?,?,?,?,?);`, [
+            newAdded.cancelation,
+            newAdded.description,
+            newAdded.offer,
+            newAdded.photo,
+            newAdded.price,
+            newAdded.discount,
+            newAdded.room_number,
+            newAdded.room_type,
+            newAdded.status
+        ])
+    return await querySQL(`SELECT * FROM room WHERE room_number = ?`, [newAdded.room_number])
 }
 
 export const updateOne = async (id: string, updatedData: RoomData) => {
-    const editedRoom = await Room.findByIdAndUpdate(id, updatedData, { new: true })
-    if (!editedRoom) throw new ApiError(404, 'Room Id Not Found')
-    return editedRoom
+    const editedRoom = await querySQL(`SELECT * FROM room WHERE _id = ?;`, [id])
+    if (Object.keys(editedRoom).length === 0) throw new ApiError(404, 'Room Id Not Found')
+    await querySQL(`UPDATE room
+        SET cancelation = ?, description = ?, offer = ?, photo = ?, price = ?, discount = ?, room_number = ?, room_type = ?, status = ? 
+        WHERE _id = ?;`, [
+            updatedData.cancelation,
+            updatedData.description,
+            updatedData.offer,
+            updatedData.photo,
+            updatedData.price,
+            updatedData.discount,
+            updatedData.room_number,
+            updatedData.room_type,
+            updatedData.status,
+            id
+        ])
+    return await querySQL(`SELECT * FROM room WHERE _id = ?;`, [id])
 }
 
 export const deleteOne = async (id: string) => {
-    const deletedRoom = await Room.findByIdAndDelete(id)
-    if (!deletedRoom) throw new ApiError(404, 'Room Id Not Found')
+    const deletedRoom = await querySQL(`DELETE FROM room WHERE _id = ?`, [id])
+    if (Object.keys(deletedRoom).length === 0) throw new ApiError(404, 'Room Id Not Found')
     return deletedRoom
 }

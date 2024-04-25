@@ -10,6 +10,6 @@ export interface RoomData {
     price: string
     discount: string
     cancelation: string
-    amenities: string[]
+    amenities?: string[]
     status: string
 }

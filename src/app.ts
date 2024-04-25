@@ -7,7 +7,6 @@ import { loginRouter } from './controllers/login'
 import dotenv from 'dotenv'
 import path from 'path'
 import { authMiddleware } from './middleware/auth'
-import mongoose from 'mongoose'
 import { errorHandler } from './controllers/errorHandler'
 import cors from 'cors'
 
@@ -20,14 +19,6 @@ app.use(cors({
     "origin": ["http://dashboardmirandanzluis.s3-website.eu-west-3.amazonaws.com", "http://localhost:5173"],
     "methods": "GET,HEAD,PUT,POST,DELETE",
 }))
-
-mongoose.connect(process.env.MONGODB_URI_TEST!)
-    .then(() => {
-        console.log('Connected to mongodb')
-    })
-    .catch(() => {
-        console.log('Error connecting mongodb')
-    })
 
 app.get('/', (_req: Request, res: Response) => {
     const filePath = path.resolve(process.cwd(), 'index.html');

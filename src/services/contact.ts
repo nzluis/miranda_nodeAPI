@@ -1,31 +1,50 @@
 import { ContactData } from '../interfaces/Contact'
-import { Contact } from '../models/Contact'
 import { ApiError } from '../controllers/errorHandler'
+import { querySQL } from '../utils/sqlQuery'
 
 export const fetchAll = async () => {
-    const contacts = await Contact.find()
-    if (!contacts) throw new ApiError(404, 'Data Not Found')
-    return contacts
+    return await querySQL(`SELECT * FROM contact`)
 }
 
 export const fetchOne = async (id: string) => {
-    const contact = await Contact.findById(id)
-    if (!contact) throw new ApiError(404, 'Contact Id Not Found')
+    const contact = await querySQL(`SELECT * FROM contact WHERE _id = ?`, [id])
+    if (Object.keys(contact).length === 0) throw new ApiError(404, 'Contact Id Not Found')
     return contact
 }
 
 export const addNew = async (newAdded: ContactData) => {
-    return await new Contact(newAdded).save()
+    const newUser = await querySQL(`INSERT INTO contact (
+        full_name, email, phone, subject, message, status) 
+        VALUES (?,?,?,?,?,?,?,?,?);`, [
+            newAdded.full_name,
+            newAdded.email,
+            newAdded.phone,
+            newAdded.subject,
+            newAdded.message,
+            newAdded.status,
+        ])
+    return newUser
 }
 
 export const updateOne = async (id: string, updatedData: ContactData) => {
-    const editedContact = await Contact.findByIdAndUpdate(id, updatedData, { new: true })
-    if (!editedContact) throw new ApiError(404, 'Contact Id Not Found')
-    return editedContact
+    const editedContact = await querySQL(`SELECT * FROM contact WHERE _id = ?;`, [id])
+    if (Object.keys(editedContact).length === 0) throw new ApiError(404, 'Contact Id Not Found')
+    const editedUser = await querySQL(`UPDATE contact
+        SET full_name = ?, email = ?, phone = ?, subject = ?, message = ?, status = ? 
+        WHERE _id = ?;`, [
+            updatedData.full_name,
+            updatedData.email,
+            updatedData.phone,
+            updatedData.subject,
+            updatedData.message,
+            updatedData.status,
+            id
+        ])
+    return editedUser
 }
 
 export const deleteOne = async (id: string) => {
-    const deletedContact = await Contact.findByIdAndDelete(id)
-    if (!deletedContact) throw new ApiError(404, 'Contact Id Not Found')
+    const deletedContact = await querySQL(`DELETE FROM contact WHERE _id = ?`, [id])
+    if (Object.keys(deletedContact).length === 0) throw new ApiError(404, 'Contact Id Not Found')
     return deletedContact
 }

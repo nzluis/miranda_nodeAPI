@@ -13,7 +13,7 @@ export const fetchOne = async (id: string) => {
 }
 
 export const addNew = async (newAdded: ContactData) => {
-    const newUser = await querySQL(`INSERT INTO contact (
+    const newContact = await querySQL(`INSERT INTO contact (
         full_name, email, phone, subject, message, status) 
         VALUES (?,?,?,?,?,?,?,?,?);`, [
             newAdded.full_name,
@@ -23,13 +23,13 @@ export const addNew = async (newAdded: ContactData) => {
             newAdded.message,
             newAdded.status,
         ])
-    return newUser
+    return newContact
 }
 
 export const updateOne = async (id: string, updatedData: ContactData) => {
-    const editedContact = await querySQL(`SELECT * FROM contact WHERE _id = ?;`, [id])
-    if (Object.keys(editedContact).length === 0) throw new ApiError(404, 'Contact Id Not Found')
-    const editedUser = await querySQL(`UPDATE contact
+    const foundContact = await querySQL(`SELECT * FROM contact WHERE _id = ?;`, [id])
+    if (Object.keys(foundContact).length === 0) throw new ApiError(404, 'Contact Id Not Found')
+    const editedContact = await querySQL(`UPDATE contact
         SET full_name = ?, email = ?, phone = ?, subject = ?, message = ?, status = ? 
         WHERE _id = ?;`, [
             updatedData.full_name,
@@ -40,7 +40,7 @@ export const updateOne = async (id: string, updatedData: ContactData) => {
             updatedData.status,
             id
         ])
-    return editedUser
+    return editedContact
 }
 
 export const deleteOne = async (id: string) => {

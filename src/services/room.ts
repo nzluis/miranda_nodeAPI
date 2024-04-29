@@ -13,7 +13,7 @@ export const fetchOne = async (id: string) => {
 }
 
 export const addNew = async (newAdded: RoomData) => {
-    const newUser = await querySQL(`INSERT INTO room (
+    const newRoom = await querySQL(`INSERT INTO room (
         cancelation, description, offer, photo, price, discount, room_number, room_type, status) 
         VALUES (?,?,?,?,?,?,?,?,?);`, [
             newAdded.cancelation,
@@ -26,13 +26,13 @@ export const addNew = async (newAdded: RoomData) => {
             newAdded.room_type,
             newAdded.status
         ])
-    return newUser
+    return newRoom
 }
 
 export const updateOne = async (id: string, updatedData: RoomData) => {
-    const editedRoom = await querySQL(`SELECT * FROM room WHERE _id = ?;`, [id])
-    if (Object.keys(editedRoom).length === 0) throw new ApiError(404, 'Room Id Not Found')
-    const editedUser = await querySQL(`UPDATE room
+    const foundRoom = await querySQL(`SELECT * FROM room WHERE _id = ?;`, [id])
+    if (Object.keys(foundRoom).length === 0) throw new ApiError(404, 'Room Id Not Found')
+    const editedRoom = await querySQL(`UPDATE room
         SET cancelation = ?, description = ?, offer = ?, photo = ?, price = ?, discount = ?, room_number = ?, room_type = ?, status = ? 
         WHERE _id = ?;`, [
             updatedData.cancelation,
@@ -46,7 +46,7 @@ export const updateOne = async (id: string, updatedData: RoomData) => {
             updatedData.status,
             id
         ])
-    return editedUser
+    return editedRoom
 }
 
 export const deleteOne = async (id: string) => {

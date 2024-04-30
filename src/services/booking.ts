@@ -3,11 +3,49 @@ import { ApiError } from '../controllers/errorHandler'
 import { querySQL } from '../utils/sqlQuery'
 
 export const fetchAll = async () => {
-    return await querySQL(`SELECT * FROM booking`)
+    return await querySQL(`SELECT
+    booking._id,
+    booking.first_name,
+    booking.last_name,
+    booking.check_in,
+    booking.check_out,
+    booking.request,
+    booking.status,
+    booking.order_date,
+    JSON_OBJECT('_id',room._id,
+        'room_number', room.room_number,
+        'room_type', room.room_type,
+        'offer', room.offer,
+        'price', room.discount,
+        'photo', room.photo,
+        'description', room.description,
+        'cancelation', room.cancelation,
+        'status', room.status
+    ) as room
+    FROM booking LEFT JOIN room ON booking.room = room._id;`)
 }
 
 export const fetchOne = async (id: string) => {
-    const booking = await querySQL(`SELECT * FROM booking WHERE _id = ?`, [id])
+    const booking = await querySQL(`SELECT
+    booking._id,
+    booking.first_name,
+    booking.last_name,
+    booking.check_in,
+    booking.check_out,
+    booking.request,
+    booking.status,
+    booking.order_date,
+    JSON_OBJECT('_id',room._id,
+        'room_number', room.room_number,
+        'room_type', room.room_type,
+        'offer', room.offer,
+        'price', room.discount,
+        'photo', room.photo,
+        'description', room.description,
+        'cancelation', room.cancelation,
+        'status', room.status
+    ) as room
+    FROM booking LEFT JOIN room ON booking.room = room._id WHERE booking._id = ?`, [id])
     if (Object.keys(booking).length === 0) throw new ApiError(404, 'Booking Id Not Found')
     return booking
 }

@@ -24,14 +24,16 @@ async function createRoom(){
 }
 
 async function createBooking(){
+    const checkIn = faker.date.soon({ days: 365, refDate: '2024-05-01' });
+    const checkOut = faker.date.soon({ days: 10, refDate: new Date(checkIn) });
     const connection: any = await mysql.createConnection(accessConfig);
     connection.execute(`INSERT INTO booking (
     first_name, last_name, check_in, check_out, request, room, status, order_date) 
     VALUES (
         "${faker.person.firstName()}",
         "${faker.person.lastName()}",
-        '${(faker.date.anytime()).toISOString().slice(0,10)}',
-        '${(faker.date.anytime()).toISOString().slice(0,10)}',
+        '${checkIn.toISOString().slice(0,10)}',
+        '${checkOut.toISOString().slice(0,10)}',
         '${faker.lorem.sentence(20)}',
         ${Math.ceil(Math.random() * (TOTAL_RECORDS - 1))},
         '${faker.helpers.arrayElement(['In Progress', 'Check Out', 'Check In'])}',
